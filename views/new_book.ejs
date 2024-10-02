@@ -1,0 +1,83 @@
+<%- include('partials/header.ejs') %>
+
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Book Notes</span>
+    </a>
+    
+</header>
+
+    <h1 class="container">ADDING NEW BOOK</h1>
+
+
+    
+    <form class="container" action="/add_new_book" method="post">
+
+        <h2 class="mb-3">Information about the book</h1>
+        
+        <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" class="form-control" id="title" placeholder="Book title" name="title">
+        </div>
+        
+        <div class="mb-3">
+            <label for="isbn" class="form-label">ISBN:</label>
+            <input type="text" class="form-control" id="isbn" placeholder="ex: 1234567890123" name="isbn">
+        </div>
+
+        <div class="mb-3">
+            <label for="synopsis" class="form-label">Synopsis:</label>
+            <textarea class="form-control" id="synopsis" placeholder="Book Synopsis" name="synopsis"></textarea>
+        </div>
+
+        <br>
+        <br>
+        <h2 class="mb-3">Information related with your review</h1>
+
+        <div class="mb-3"></div>
+            <label for="date" class="form-label">Finish Reading date:</label>
+            <input type="date" class="form-control" id="date" name="date">
+        </div>
+
+        <div class="mb-3"></div>
+            <label for="rate" class="form-label">Your rate:</label>
+            <input type="number" class="form-control" id="rate" placeholder="1 up to 10" name="rate">
+        </div>
+
+        <div class="mb-3"></div>
+            <label for="yourNotes" class="form-label">Your Notes:</label>
+            <textarea class="form-control" id="yourNotes" placeholder="Your notes here..." name="yourNotes"></textarea>
+        </div>
+
+        <div class="d-grid gap-2 col-6 mx-auto mt-3">
+            <button class="btn btn-primary" type="submit" name="submitNewBook">Submit New Book Information</button>
+        </div>
+
+    </form>
+        
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reseta a altura para calcular corretamente
+            textarea.style.height = textarea.scrollHeight + 'px'; // Ajusta com base na altura do conteúdo
+        }
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            const textareaSynopsis = document.getElementById('synopsis');
+            const textareaNotes = document.getElementById('yourNotes');
+            autoResizeTextarea(textareaSynopsis); // Ajusta quando a página carrega
+            autoResizeTextarea(textareaNotes);
+    
+            // Ajusta quando o usuário digitar
+            textarea.addEventListener('input', function() {
+                autoResizeTextarea(textareaSynopsis); 
+                autoResizeTextarea(textareaNotes);
+            });
+        });
+    </script>    
+
+
+
+
+<%- include('partials/footer.ejs') %>

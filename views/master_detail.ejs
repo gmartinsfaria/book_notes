@@ -1,0 +1,104 @@
+<%- include('partials/header.ejs') %>
+
+
+
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Book Notes</span>
+    </a>
+    
+</header>
+
+    <% if (locals.error){%>
+        <p><%= error %></p>
+    <% }%>
+
+    <% if(locals.bookDetails && locals.authors) {%>
+        
+        <div class="container book-container bg-body-tertiary p-4">
+            <div class="title">
+                <h1><%=bookDetails.title%></h1>
+            </div>
+            
+            <div class="cover">
+                <img class="mx-lg-auto img-fluid rounded mx-auto" src="https://covers.openlibrary.org/b/id/<%=bookDetails.cover%>-M.jpg" alt="book cover">
+                <p><b>Reading Date: </b><%=  bookDetails.reading_date %></p>
+                <p><b>Rate: </b><%= bookDetails.rate %>/10</p>
+
+                <% authors.forEach((author) => { %>
+                    
+                    <% if (author.id == bookDetails.id){ %>
+                        <%= console.log(`AUTHOR KEY_LINK: ${author.link_key}`); %>
+                        <a href="https://openlibrary.org/authors/<%=bookDetails.link_key%>" target="_blank">
+                            <img class="mx-lg-auto img-fluid rounded mx-auto" src="https://covers.openlibrary.org/a/olid/<%=author.link_key%>-S.jpg" alt="author picture">
+                        </a>
+                    <% } %>
+                <% }) %>
+            </div>
+            
+            
+            <div class="synopsis">
+                <h2>Synopsis</h2>
+
+                <p><%= bookDetails.synopsis %></p>
+            </div>
+        </div>
+
+            
+        <form class="container" action="/edit" method="post">
+
+            <h2 class="mb-3">My book Notes</h1>
+            
+                <!-- <label for="isbn"><b>ISBN:</b></label>
+                <input type="text" id="isbn" name="updatedISBN" value="<%=bookDetails.isbn%>">
+                -->
+            <div class="mb-3">
+                <label for="readingDate" class="form-label"><b>Finish Reading date:</b></label>
+                <input type="date" id="readingDate" class="form-control" name="updatedReadingDate" value="<%=bookDetails.reading_date%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="rate" class="form-label"><b>Your Rate:</b></label>
+                <input type="number" id="rate" class="form-control" name="updatedRate" value="<%=bookDetails.rate%>">
+            </div>
+
+            <div class="mb-3">
+                <label for="myNotes" class="form-label"><b>My Notes:</b></label>
+                <textarea type="text" id="myNotes" class="form-control" name="updatedNotes" rows="auto"><%=bookDetails.notes%></textarea>
+            </div>
+        
+            
+        
+            <button class="btn btn-primary" type="submit" name="bookId" value=<%= bookDetails.id %> >Submit Changes</button>
+            
+            
+
+        </form>
+
+        <form class="container delete-form" action="/delete_book" method="post">
+            <button type="submit" class="btn btn-danger" name="bookId" value=<%= bookDetails.id %>>Delete Book</button>
+        </form>
+        
+    <% } %>
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reseta a altura para calcular corretamente
+            textarea.style.height = textarea.scrollHeight + 'px'; // Ajusta com base na altura do conteúdo
+        }
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById('myNotes');
+            autoResizeTextarea(textarea); // Ajusta quando a página carrega
+    
+            // Ajusta quando o usuário digitar
+            textarea.addEventListener('input', function() {
+                autoResizeTextarea(textarea);
+            });
+        });
+    </script>
+
+
+
+<%- include('partials/footer.ejs') %>

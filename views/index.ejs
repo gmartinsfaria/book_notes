@@ -1,0 +1,106 @@
+<%- include('partials/header.ejs') %>
+
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Book Notes</span>
+    </a>
+
+    
+    <ul class="nav nav-pills">
+        
+        <li class="nav-item"><button class="nav-link active" name="newBook" value="introducing_new_book" onclick="window.location.href='/new_book_link';">+ Add new Book</button></li>
+        
+
+        <form action="/order_by" method="get">
+            <li class="nav-item">
+                <button class="nav-link" type="submit" name="sorting" value="date">
+                    <span class="order">Order by:</span> &nbsp; &nbsp; Reading Date
+                </button>
+            </li>
+        </form>
+
+        <form action="/order_by" method="get">
+            <li class="nav-item">
+                <button class="nav-link" type="submit" name="sorting" value="rating">
+                    Rating
+                </button>
+            </li>
+        </form>
+
+        <form action="/order_by" method="get">
+            <li class="nav-item">
+                <button class="nav-link" type="submit" name="sorting" value="title">
+                    Title
+                </button>
+            </li>
+        </form>
+    </ul>
+    
+</header>
+
+<% if (locals.error){%>
+    <div class="container my-5"></div>
+        <div class="bg-body-tertiary p-5 rounded">
+            <div class="col-sm-8 py-5 mx-auto">
+                <h1 class="display-5 fw-normal">ERROR</h1>
+                <p class="fs-5"><%= error %></p>
+            </div>
+        </div>
+    </div>
+<% }%>
+
+
+<% if (locals.books && locals.authors && locals.books != "" && locals.authors != "") { %>
+    <%= console.log("Books é:" + books) %>
+    <% books.forEach((book) => { %>
+
+        <div class="container book-container bg-body-tertiary p-4">
+            <div class="title">
+                <h1><%= book.title%></h1>
+            </div>
+            
+            <div class="cover">
+                <img class="mx-lg-auto img-fluid rounded mx-auto" src="https://covers.openlibrary.org/b/id/<%=book.cover%>-M.jpg" alt="book cover">
+                <p><b>Reading Date: </b><%=  book.reading_date %></p>
+                <p><b>Rate: </b><%= book.rate %>/10</p>
+
+                <% authors.forEach((author) => { %>
+                    <% if (author.id == book.id){ %>
+                        <a href="https://openlibrary.org/authors/<%=author.link_key%>" target="_blank">
+                            <img class="mx-lg-auto img-fluid rounded mx-auto" src="https://covers.openlibrary.org/a/olid/<%=author.link_key%>-S.jpg" alt="author picture">
+                        </a>
+                    <% } %>
+                <% }) %>
+            </div>
+            
+            <div class="synopsis">
+                <h2>Synopsis</h2>
+
+                <p><%= book.synopsis %></p>
+
+                <form class="my-notes-btn" action="/master_detail" method="post">
+                    <button class="btn btn-primary" type="submit" name="book" value=<%= book.id %> >My notes</button>
+
+                    <a href="https://openlibrary.org/books/<%=book.link_key%>" target="_blank">
+                        <button class="btn btn-secondary" type="button" >Book Details</button>
+                    </a>
+                </form>
+            </div>
+        </div>
+    <%})%>
+
+<% } else {%>
+    <div class="container my-5">
+        <div class="bg-body-tertiary p-5 rounded">
+            <div class="col-sm-8 py-5 mx-auto">
+                <h1 class="display-5 fw-normal">You have no books yet</h1>
+                <p class="fs-5">Add a new book to you list.</p>
+                <p>You can also add you personal notes about each book, rate it and mention the date you finished reading it.</p>
+                <button class="btn btn-primary" role="button" value="introducing_new_book" onclick="window.location.href='/new_book_link';">+Add a new Book</button>
+            </div>
+        </div>
+    </div>
+<% } %>
+
+<%- include('partials/footer.ejs') %>
